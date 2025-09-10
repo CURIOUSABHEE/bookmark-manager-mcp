@@ -18,6 +18,7 @@ model Bookmark {
   id        String   @id @default(cuid())
   url       String
   title     String
+  notes     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   userId    String //clerk user id
