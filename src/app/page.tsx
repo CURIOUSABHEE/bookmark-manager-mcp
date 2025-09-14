@@ -5,9 +5,10 @@ import {
 } from '@clerk/nextjs'
 import { useBookmarks } from '@/hooks/useBookmarks';
 import { CreateBookmarkData } from '@/types/bookmark';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from "./page.module.css";
 import BookmarkForm from '@/components/BookmarkForm';
+import BookmarkList from '@/components/BookmarkList';
 
 export default function Home() {
   const {
@@ -20,7 +21,12 @@ export default function Home() {
 } = useBookmarks()
 
 const [showAddForm, setShowAddForm] = useState(false)
-const [ isSubmitting, setIsSubmitting] = useState(false)
+const [isSubmitting, setIsSubmitting] = useState(false)
+const [mounted, setMounted] = useState(false)
+
+useEffect(() => {
+  setMounted(true)
+}, [])
 
 const handleAddBookmark = async(data:CreateBookmarkData) =>{
   try {
@@ -44,7 +50,7 @@ const handleDeleteBookmark = async(id : string) =>{
   }
 }
 
-if(loading){
+if(loading || !mounted){
   return <div className={styles['loading-container']}>
     <div  className={styles['loading-content']}>
       <div  className={styles['loading-spinner']}>
@@ -57,12 +63,12 @@ if(loading){
   return (
     <div>
       <SignedIn>
-      <div className='container'>
+        <div className='container'>
           <div className={styles['page-header']}>
             <div className={styles['header-content']}>
               <div className={styles['header-text']}>
-                  <h1>Bookmark Manager</h1>
-                  <p>Organise your Bookmarks</p>
+                <h1>Bookmark Manager</h1>
+                <p>Organise your Bookmarks</p>
               </div>
               <div className={styles['header-button']}>
                 <button className='btn btn-primary' onClick={()=> setShowAddForm(!showAddForm)}>
@@ -71,18 +77,24 @@ if(loading){
               </div>
             </div>
           </div>
+          
+          {error && (
+            <div className={styles['error-message']}>
+              <p>Error: {error}</p>
+              <button onClick={refetch} className='btn btn-secondary'>
+                Retry
+              </button>
+            </div>
+          )}
+          
+          {showAddForm && (
+            <div className={styles['form-section']}>
+              <BookmarkForm onSubmit={handleAddBookmark} isSubmitting={isSubmitting} />
+            </div>
+          )}
+          
+          <BookmarkList bookmarks={bookmarks} onDelete={handleDeleteBookmark} />
         </div>
-        {
-          error && <div className={styles['error-message']}>
-            <p>Error: {error}</p>
-            <button onClick={refetch} className='btn btn-secondary'>
-              Retry
-            </button>
-          </div>
-        }
-        { showAddForm && <div className={styles['form-section ']}>
-          <BookmarkForm onSubmit={handleAddBookmark} isSubmitting={isSubmitting}></BookmarkForm>
-          </div>}
       </SignedIn>
       <SignedOut>
         <div className={styles['signout-container']}>

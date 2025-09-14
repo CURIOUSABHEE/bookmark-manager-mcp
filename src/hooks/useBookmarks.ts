@@ -64,7 +64,7 @@ export function useBookmarks() {
                 throw new Error("Failed to fetch data")
             }
             setBookmarks((prev)=> prev.filter((bookmark)=>{
-                bookmark.id !== id
+                return bookmark.id !== id
             }))
         } catch (err){
             const errorMessage = err instanceof Error? err.message: "An Error Occurred"

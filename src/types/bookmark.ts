@@ -3,8 +3,8 @@ export type Bookmark = {
   url: string;
   title: string;
   notes: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string; // Changed to string to match API response
+  updatedAt: string; // Changed to string to match API response
   userId: string;
 };
 

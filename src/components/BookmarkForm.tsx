@@ -1,3 +1,4 @@
+'use client'
 import { CreateBookmarkData } from '@/types/bookmark'
 import { useState } from 'react';
 
@@ -9,9 +10,9 @@ interface BookmarkFormProps{
 
 export default function BookmarkForm({onSubmit, initialData, isSubmitting=false}:BookmarkFormProps){
     const [formData, setFormData] = useState<CreateBookmarkData>({
-        url: initialData?.url || ' ',
-        title: initialData?.title || ' ',
-        notes: initialData?.notes || ' ',
+        url: initialData?.url || '',
+        title: initialData?.title || '',
+        notes: initialData?.notes || '',
     })
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
@@ -52,15 +53,14 @@ export default function BookmarkForm({onSubmit, initialData, isSubmitting=false}
             />
         </div>
         <div className='form-group'>
-            <label htmlFor='notes' className='form-label'>Notes </label>
-            <input 
-                type='notes'
+            <label htmlFor='notes' className='form-label'>Notes</label>
+            <textarea 
                 id='notes'
                 onChange={(e)=>setFormData((prev)=>({...prev, notes: e.target.value}))}
-                className='form-input'
-                placeholder='Enter notes'
-                required
+                className='form-input form-textarea'
+                placeholder='Enter notes (optional)'
                 disabled={isSubmitting}
+                rows={4}
             />
         </div>
 
