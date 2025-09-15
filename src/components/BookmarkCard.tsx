@@ -78,7 +78,7 @@ export default function BookmarkCard ({bookmark, onDelete}: BookmarkCardProps){
                 {getDomain(bookmark.url)} - {formatDate(bookmark.createdAt)}
             </p>
             {bookmark.notes && (
-                <div className="notes-section">
+                <div className="notes-section"> 
                     <p className="notes-content">
                         {bookmark.notes}
                     </p>
